@@ -1,20 +1,26 @@
-"""Gera um banco de senhas de exemplo, para o auditor ter o qye analisar"""
+"""
+Auditor de senhas - Etapa 1: Ler o bando e casar com o cracker.
+
+Roda DENTRO da organizaçao com autorizacao sobre o banco de senhas dela. 
+O objetivo é defensivo: descobrir quais senhas sao fracas ANTES
+que um atacante descubra, e forçar a troca.
+
+O banco tem uma conta por linha no formato:
+usuario:hash
+
+Nenhuma senha em texto - só o hash como um sistema de verdae guarda.
+"""
 
 import hashlib
 
 def gerar_hash (senha):
     return hashlib.sha256(senha.encode("utf-8")).hexdigest()
 
-contas = [
-    ("joao.silva", "123456"),                       # senha vazada
-    ("maria.souza", "maria.souza"),                 # senha = nome de usuario
-    ("pedro.lima", "sol42"),                        # curta demais
-    ("ana.costa", "zxq9k"),                         # curta, mas fora de listas
-    ("bruno.dev", "girafa-nuvem-relogio-tijolo"),   # longa e imprevisivel
-]
+def carregar_wordlist(caminho):
+    palavras = []
 
-with open("banco_de_senhas.txt", "w", encoding="utf-8")as arquivo:
-    for usuario, senha in contas:
-        arquivo.write("{}:{}\n".format(usuario, gerar_hash(senha)))
-
-print("banco_de_senhas.txt criado com {} contas.".format(len(contas)))
+    with open(caminho, "r", encoding="utf-8", erros="ignore") as arquivo:
+        for linha in arquivo:
+            palavra = linha.strip()
+            if palavra:
+                palavras.append(palavras)
