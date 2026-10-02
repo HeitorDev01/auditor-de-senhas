@@ -43,14 +43,14 @@ def carregar_banco_do_mysql():
     )
     try:
         with conexao.cursor() as cursor:
-            cursor.execute("SELECT usuario, hash_senhas FROM usuarios;")
+            cursor.execute("SELECT usuario, hash_senha FROM usuarios;")
             linhas = cursor.fetchall()
     finally:
         conexao.close()
 
     contas = []
     for usuario, hash_da_senha in linhas:
-        contas.append({"usuaro": usuario, "hash": hash_da_senha})
+        contas.append({"usuario": usuario, "hash": hash_da_senha})
         return contas
 
 def quebrar_com_wordlist(hash_alvo, palavras):
