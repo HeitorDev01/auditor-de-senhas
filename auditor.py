@@ -12,6 +12,9 @@ Nenhuma senha em texto - só o hash como um sistema de verdae guarda.
 """
 
 import hashlib
+import os
+
+import pymysql
 
 def gerar_hash (senha):
     """Devole o hash SHA-256 da senha, em texto hexadecimal"""
@@ -21,34 +24,34 @@ def carregar_wordlist(caminho):
     """Le um arquivo de senhas, uma por linha, sem quebras"""
     palavras = []
 
-    with open(caminho, "r", encoding="utf-8", erros="ignore") as arquivo:
+    with open(caminho, "r", encoding="utf-8", errors="ignore") as arquivo:
         for linha in arquivo:
             palavra = linha.strip()
             if palavra:
-                palavras.append(palavras)
+                palavras.append(palavra)
+
     return palavras
 
-def carregar_banco(caminho):
-    """le o banco 'usuario:hash' e devolve uma lista de contas."""
+def carregar_banco_do_mysql():
+    conexao = pymysql.connect(
+        host=os.environ.get("DB_HOST", "127.0.0.1"),
+        port=int(os.environ.get("DB_PORT", "3306")),
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        database=os.environ.get("DB_NAME", "auditoria"),
+        charset="utf8mb4",
+    )
+    try:
+        with conexao.cursor() as cursor:
+            cursor.execute("SELECT usuario, hash_senhas FROM usuarios;")
+            linhas = cursor.fetchall()
+    finally:
+        conexao.close()
+
     contas = []
-
-    with open(caminho, "r", encoding="utf-8", errors="ignore") as arquivo:
-        for numero, linha in enumerate(arquivo, start=1):
-            linha = linha.strip()
-            if not linha:
-                continue
-
-            if ":" not in linha:
-                print("    [aviso] linha {} sem ':' - ignorada".format(numero))
-                continue
-
-            usuario, hash_da_senha = linha.split(":", 1)
-            contas.append({
-                "usuario": usuario,
-                "hash": hash_da_senha,
-            })
-
-    return contas
+    for usuario, hash_da_senha in linhas:
+        contas.append({"usuaro": usuario, "hash": hash_da_senha})
+        return contas
 
 def quebrar_com_wordlist(hash_alvo, palavras):
     """Testa a wordlist contra o hash. Devolve a senha ou None."""
@@ -59,15 +62,15 @@ def quebrar_com_wordlist(hash_alvo, palavras):
     return None
 
 if __name__ == "__main__":
-    contas = carregar_banco("banco_de_senhas.txt")
+    contas = carregar_banco_do_mysql()
     vazadas = carregar_wordlist("vazadas.txt")
 
-    print("Banco: {} contas".format(len(contas)))
+    print("Banco (MySQL): {} contas".format(len(contas)))
     print("Lista de senhas vazadas: {} encontradas.".format(len(vazadas)))
     print("")
 
     for conta in contas:
-        senha = quebrar_com_wordlist(conta[hash], vazadas)
+        senha = quebrar_com_wordlist(conta["hash"], vazadas)
         if senha is not None:
             print("{:<14} senha na lista de vazadas: '{}'".format(
                 conta["usuario"],senha))
