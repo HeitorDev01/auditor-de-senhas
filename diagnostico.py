@@ -2,7 +2,7 @@ import os
 import pymysql
 
 con = pymysql.connect(
-    host=os.environ.get("DB_HOST", "127.0.0.1"),
+    host=os.environ.get("DB_HOST", "localhost"),
     port=int(os.environ.get("DB_PORT", "3306")),
     user=os.environ["DB_USER"],
     password=os.environ["DB_PASSWORD"],

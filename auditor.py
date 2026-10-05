@@ -34,7 +34,7 @@ def carregar_wordlist(caminho):
 
 def carregar_banco_do_mysql():
     conexao = pymysql.connect(
-        host=os.environ.get("DB_HOST", "127.0.0.1"),
+        host=os.environ.get("DB_HOST", "localhost"),
         port=int(os.environ.get("DB_PORT", "3306")),
         user=os.environ["DB_USER"],
         password=os.environ["DB_PASSWORD"],
@@ -51,7 +51,8 @@ def carregar_banco_do_mysql():
     contas = []
     for usuario, hash_da_senha in linhas:
         contas.append({"usuario": usuario, "hash": hash_da_senha})
-        return contas
+
+    return contas
 
 def quebrar_com_wordlist(hash_alvo, palavras):
     """Testa a wordlist contra o hash. Devolve a senha ou None."""
@@ -73,6 +74,6 @@ if __name__ == "__main__":
         senha = quebrar_com_wordlist(conta["hash"], vazadas)
         if senha is not None:
             print("{:<14} senha na lista de vazadas: '{}'".format(
-                conta["usuario"],senha))
+                conta["usuario"], senha))
         else:
-            print("     {:<14} resistiu ao dicionario".format(conta["usuario"]))
+            print("{:<14} resistiu ao dicionario".format(conta["usuario"]))
