@@ -12,6 +12,7 @@ Nenhuma senha em texto - só o hash como um sistema de verdae guarda.
 """
 
 import hashlib
+from pickle import NONE
 import intertools
 import string
 import os
@@ -89,6 +90,31 @@ def forca_bruta(hash_alvo, tamanho_maximo):
             if gerar_hash(tentativa) == hash_alvo:
                 return tentativa
     return None
+
+def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
+    senha = None
+    origem = None
+
+    recuperada = quebrar_com_wordlist(hash_armazenamento, vazadas)
+    if recuperada is not None:
+        senha = recuperada
+        origem ='vazada'
+
+    if senha is None and gerar_hash(usuario) == hash_armazenamento:
+        usuario = usuario
+        origem = "igual_ao_usuario"
+    if senha is None:
+        print("      ... testando forca bruta em '{}'(ate {} caracteres, pode demorar)". format(usuario, tamanho_bruta))
+        recuperada = forca_bruta(hash_armazenamento, tamanho_bruta)
+        if recuperada is not None:
+            senha = recuperada
+            origem = "forca_bruta"
+
+    if senha is None:
+        return{
+            
+        }
+    
 
 if __name__ == "__main__":
     contas = carregar_banco_do_mysql()
