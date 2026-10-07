@@ -12,6 +12,8 @@ Nenhuma senha em texto - só o hash como um sistema de verdae guarda.
 """
 
 import hashlib
+import intertools
+import string
 import os
 
 import pymysql
@@ -79,6 +81,15 @@ def quebrar_com_wordlist(hash_alvo, palavras):
 
     return None
 
+def forca_bruta(hash_alvo, tamanho_maximo):
+    alfabeto = string.ascii_lowercase + string.digits
+    for tamanho in range(1, tamanho_maximo + 1):
+        for combinacao in itertools.product(alfabeto, repeat=tamanho):
+            tentativa = "".join(combinacao)
+            if gerar_hash(tentativa) == hash_alvo:
+                return tentativa
+    return None
+
 if __name__ == "__main__":
     contas = carregar_banco_do_mysql()
     vazadas = carregar_wordlist("vazadas.txt")
@@ -94,3 +105,4 @@ if __name__ == "__main__":
                 conta["usuario"], senha))
         else:
             print("{:<14} resistiu ao dicionario".format(conta["usuario"]))
+
