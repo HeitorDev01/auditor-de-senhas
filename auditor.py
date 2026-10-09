@@ -112,8 +112,27 @@ def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
 
     if senha is None:
         return{
-            
+            "usuarios": usuarios,
+            "nivel": "OK",
+            "senha": None,
+            "motivos":["resistiu a todos os testes (dicionario, usuario e forca bruta)"] ,
         }
+
+    motivos = []
+    if origem == "vazada":
+        motivos.append("consta em lista de senhas vazadas")
+    if origem == "igual_ao_usuario":
+        motivos.append("igual ao nome de usuario")
+    if origem == "forca_bruta":
+        motivos.append("descoberta por forca bruta (ate {} caracteres)".format(tamanho_bruta))
+    if len(senha) < 8:
+        motivos.append("curta demais ({}caracteres)".format(len(senha)))
+    if senha.isdigit():
+        motivos.append("composta apenas por numeros")
+
+    nivel = "CRITICA" if origem == "vazadas" else "ALTA"
+
+    return {"usuario": usuario, "nivel": nivel, "senha": senha, "motivos": motivos}
     
 
 if __name__ == "__main__":
