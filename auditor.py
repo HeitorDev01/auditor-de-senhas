@@ -98,11 +98,12 @@ def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     recuperada = quebrar_com_wordlist(hash_armazenamento, vazadas)
     if recuperada is not None:
         senha = recuperada
-        origem ='vazada'
+        origem ="vazada"
 
     if senha is None and gerar_hash(usuario) == hash_armazenamento:
-        usuario = usuario
+        senha = usuario
         origem = "igual_ao_usuario"
+
     if senha is None:
         print("      ... testando forca bruta em '{}'(ate {} caracteres, pode demorar)". format(usuario, tamanho_bruta))
         recuperada = forca_bruta(hash_armazenamento, tamanho_bruta)
@@ -130,7 +131,7 @@ def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     if senha.isdigit():
         motivos.append("composta apenas por numeros")
 
-    nivel = "CRITICA" if origem == "vazadas" else "ALTA"
+    nivel = "CRITICA" if origem == "vazada" else "ALTA"
 
     return {"usuario": usuario, "nivel": nivel, "senha": senha, "motivos": motivos}
     
@@ -162,13 +163,13 @@ if __name__ == "__main__":
             print("             - {}".format(motivo))
         print("")
 
-        print("=" * 48)
-        print("Resumo: {} criticas, {} altas, {} ok".format(
-            contadores["CRITICA"], contadores["ALTA"], contadores["OK"]
-        ))
+    print("=" * 48)
+    print("Resumo: {} criticas, {} altas, {} ok".format(
+        contadores["CRITICA"], contadores["ALTA"], contadores["OK"]
+    ))
 
-        total_fracas = contadores["CRITICA"] + contadores["ALTA"]
-        if total_fracas > 0:
-            print("Acao recomendada: forcar troca de senha de {} contas(s).".format(total_fracas))
-        else:
-            print("Nenhuma senha fraca encontrada nos testes.")
+    total_fracas = contadores["CRITICA"] + contadores["ALTA"]
+    if total_fracas > 0:
+        print("Acao recomendada: forcar troca de senha de {} contas(s).".format(total_fracas))
+    else:
+        print("Nenhuma senha fraca encontrada nos testes.")
