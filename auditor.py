@@ -91,25 +91,23 @@ def forca_bruta(hash_alvo, tamanho_maximo):
                 return tentativa
     return None
 
-def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
-    senha = None
-    origem = None
 
-    recuperada = quebrar_com_wordlist(hash_armazenamento, vazadas)
+def recuperar_senha(usuario, hash_armazenado, vazadas, tamanho_bruta):
+    recuperada = quebrar_com_wordlist(hash_armazenado, vazadas)
     if recuperada is not None:
-        senha = recuperada
-        origem ="vazada"
+        return recuperada, "vazada"
 
-    if senha is None and gerar_hash(usuario) == hash_armazenamento:
-        senha = usuario
-        origem = "igual_ao_usuario"
+    if gerar_hash(usuario) == hash_armazenado:
+        return usuario, "igual_ao_usuario"
 
-    if senha is None:
-        print("      ... testando forca bruta em '{}'(ate {} caracteres, pode demorar)". format(usuario, tamanho_bruta))
-        recuperada = forca_bruta(hash_armazenamento, tamanho_bruta)
-        if recuperada is not None:
-            senha = recuperada
-            origem = "forca_bruta"
+    print("     ... testando forca bruta em '{}' (ate {} caracteres, pode demorar)".format(usuario, tamanho_bruta))
+    recuperada = forca_bruta(hash_armazenado, tamanho_bruta)
+    if recuperada is not None:
+        return recuperada, "forca_bruta"
+    return None, None
+
+def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
+    senha, origem =  recuperar_senha(usuario, hash_armazenamento, vazadas, tamanho_bruta)
 
     if senha is None:
         return{
