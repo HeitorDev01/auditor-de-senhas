@@ -16,6 +16,8 @@ from pickle import NONE
 import itertools
 import string
 import os
+import csv
+import json
 
 import pymysql
 from dotenv import load_dotenv
@@ -132,7 +134,20 @@ def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     nivel = "CRITICA" if origem == "vazada" else "ALTA"
 
     return {"usuario": usuario, "nivel": nivel, "senha": senha, "motivos": motivos}
-    
+
+def exportar_csv(resultados, caminho):
+    with open(caminho, "w", newline="", encoding="utf-8") as arquivo:
+        escritor = csv.writer(arquivo)
+        escritor.writerow(["usuario", "nivel", "senha_recuperada", "motivos"])
+        for r in resultados:
+            senha = r["senha"] if r["senha"] is not None else ""
+            motivos = "; ".join(r["motivos"])
+            escritor.writerow([r["usuario"], r["nivel"], senha, motivos])
+
+def exportar_json(resultados, caminho):
+    with open(caminho, "w", encoding="utf-8") as arquivo:
+        json.dump(resultados, arquivo, ensure_ascii=False, indent=2)
+
 
 if __name__ == "__main__":
     TAMANHO_MAXIMO_BRUTA = 5
