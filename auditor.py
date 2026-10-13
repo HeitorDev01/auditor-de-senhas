@@ -162,11 +162,12 @@ if __name__ == "__main__":
     print("(forca bruta ligata ate {} caracteres - pode levar ~1 min)".format(TAMANHO_MAXIMO_BRUTA))
     print("")
 
+    resultados = []
     contadores = {"CRITICA": 0, "ALTA": 0, "OK": 0}
     
-
     for conta in contas:
         resultado = classificar_conta(conta["usuario"], conta["hash"], vazadas, TAMANHO_MAXIMO_BRUTA)
+        resultados.append(resultado)
         contadores[resultado["nivel"]] += 1
 
         print(" [{:<7}] {}".format(resultado["nivel"], resultado["usuario"]))
@@ -186,3 +187,8 @@ if __name__ == "__main__":
         print("Acao recomendada: forcar troca de senha de {} contas(s).".format(total_fracas))
     else:
         print("Nenhuma senha fraca encontrada nos testes.")
+
+    exportar_csv(resultados, "relatorio.csv")
+    exportar_json(resultados, "relatorio.json")
+    print("")
+    print("Relatorios salvos: relatorio.csv e relatorio.json")

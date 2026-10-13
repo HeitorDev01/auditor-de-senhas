@@ -1,0 +1,46 @@
+[
+  {
+    "usuario": "joao.silva",
+    "nivel": "CRITICA",
+    "senha": "123456",
+    "motivos": [
+      "consta em lista de senhas vazadas",
+      "curta demais (6caracteres)",
+      "composta apenas por numeros"
+    ]
+  },
+  {
+    "usuario": "maria.souza",
+    "nivel": "ALTA",
+    "senha": "maria.souza",
+    "motivos": [
+      "igual ao nome de usuario"
+    ]
+  },
+  {
+    "usuario": "pedro.lima",
+    "nivel": "ALTA",
+    "senha": "sol42",
+    "motivos": [
+      "descoberta por forca bruta (ate 5 caracteres)",
+      "curta demais (5caracteres)"
+    ]
+  },
+  {
+    "usuario": "ana.costa",
+    "nivel": "ALTA",
+    "senha": "zxq9k",
+    "motivos": [
+      "descoberta por forca bruta (ate 5 caracteres)",
+      "curta demais (5caracteres)"
+    ]
+  },
+  {
+    "usuario": "bruno.dev",
+    "nivel": "OK",
+    "senha": null,
+    "motivos": [
+      "resistiu a todos os testes (dicionario, usuario e forca bruta)"
+    ]
+  }
+]
