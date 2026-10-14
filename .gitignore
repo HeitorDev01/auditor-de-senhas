@@ -9,3 +9,5 @@ __pycache__/
 
 # Credenciais / configuracao local (nunca versionar senhas do banco)
 .env
+relatorio.csv
+relatorio.json

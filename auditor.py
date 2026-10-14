@@ -12,7 +12,6 @@ Nenhuma senha em texto - só o hash como um sistema de verdae guarda.
 """
 
 import hashlib
-from pickle import NONE
 import itertools
 import string
 import os
@@ -22,6 +21,12 @@ import json
 import pymysql
 from dotenv import load_dotenv
 
+TAMANHO_MINIMO_SENHA = 8  # tamanho minimo de senha aceitavel
+TAMANHO_MAXIMO_BRUTA = 5  # tamanho maximo de senha a ser testada por forca bruta
+ARQUIVO_WORDLIST = "vazadas.txt"  # arquivo de senhas vazadas, uma por linha
+ARQUIVO_CSV = "relatorio.csv"  # arquivo de saida em CSV
+ARQUIVO_JSON = "relatorio.json"  # arquivo de saida em JSON
+ALFABETO_FORCA_BRUTA = string.ascii_lowercase + string.digits  # alfabeto para testes de forca bruta
 # Carrega as variaveis do arquivo .env (se existir), para nao precisar
 # definir DB_USER/DB_PASSWORD na mao a cada sessao do terminal.
 load_dotenv()
@@ -85,9 +90,8 @@ def quebrar_com_wordlist(hash_alvo, palavras):
     return None
 
 def forca_bruta(hash_alvo, tamanho_maximo):
-    alfabeto = string.ascii_lowercase + string.digits
     for tamanho in range(1, tamanho_maximo + 1):
-        for combinacao in itertools.product(alfabeto, repeat=tamanho):
+        for combinacao in itertools.product(ALFABETO_FORCA_BRUTA, repeat=tamanho):
             tentativa = "".join(combinacao)
             if gerar_hash(tentativa) == hash_alvo:
                 return tentativa
@@ -126,7 +130,7 @@ def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
         motivos.append("igual ao nome de usuario")
     if origem == "forca_bruta":
         motivos.append("descoberta por forca bruta (ate {} caracteres)".format(tamanho_bruta))
-    if len(senha) < 8:
+    if len(senha) < TAMANHO_MINIMO_SENHA:
         motivos.append("curta demais ({}caracteres)".format(len(senha)))
     if senha.isdigit():
         motivos.append("composta apenas por numeros")
@@ -152,7 +156,7 @@ def exportar_json(resultados, caminho):
 if __name__ == "__main__":
     TAMANHO_MAXIMO_BRUTA = 5
     contas = carregar_banco_do_mysql()
-    vazadas = carregar_wordlist("vazadas.txt")
+    vazadas = carregar_wordlist(ARQUIVO_WORDLIST)
 
     print("=" * 48)
     print("   RELATORIO DE AUDITORIA DE SENHAS")
