@@ -152,6 +152,33 @@ def exportar_json(resultados, caminho):
     with open(caminho, "w", encoding="utf-8") as arquivo:
         json.dump(resultados, arquivo, ensure_ascii=False, indent=2)
 
+def imprimir_relatorio(resultados, contadores,qtd_contas,qtd_vazadas):
+    print("=" * 48)
+    print("   RELATORIO DE AUDITORIA DE SENHAS")
+    print("=" * 48)
+    print("Banco (MySQL): {} contas".format(qtd_contas))
+    print("Lista de senhas vazadas: {} encontradas.".format(qtd_vazadas))
+    print("")
+
+    for resultado in resultados:
+        print(" [{:<7}] {}".format(resultado["nivel"], resultado["usuario"]))
+        if resultado["senha"] is not None:
+            print("      ... senha encontrada: '{}'".format(resultado["senha"]))
+        for motivo in resultado["motivos"]:
+            print("             - {}".format(motivo))
+        print("")
+
+    print("=" * 48)
+    print("Resumo: {} criticas, {} altas, {} ok".format(
+        contadores["CRITICA"], contadores["ALTA"], contadores["OK"]
+    ))
+
+    total_fracas = contadores["CRITICA"] + contadores["ALTA"]
+    if total_fracas > 0:
+        print("Acao recomendada: forcar troca de senha de {} contas(s).".format(total_fracas))
+    else:
+        print("Nenhuma senha fraca encontrada nos testes.")
+
 
 if __name__ == "__main__":
     TAMANHO_MAXIMO_BRUTA = 5
