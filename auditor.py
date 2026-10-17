@@ -1,22 +1,25 @@
 """
-Auditor de senhas - Etapa 1: Ler o bando e casar com o cracker.
+Auditor de senhas (defensivo).
 
-Roda DENTRO da organizaçao com autorizacao sobre o banco de senhas dela. 
-O objetivo é defensivo: descobrir quais senhas sao fracas ANTES
-que um atacante descubra, e forçar a troca.
+Roda DENTRO da organizacao, com autorizacao sobre o banco de senhas dela.
+O objetivo e defensivo: descobrir quais senhas sao fracas ANTES que um
+atacante descubra, e recomendar a troca.
 
-O banco tem uma conta por linha no formato:
-usuario:hash
+Le as contas de um banco MySQL (tabela 'usuarios', colunas usuario e
+hash_senha). Para cada conta, tenta recuperar a senha por tres metodos
+(lista de vazadas, senha igual ao usuario, forca bruta), classifica o
+risco (CRITICA / ALTA / OK) e exporta o relatorio em CSV e JSON.
 
-Nenhuma senha em texto - só o hash como um sistema de verdae guarda.
+O banco guarda apenas o hash de cada senha, nunca o texto -
+como um sistema de verdade.
 """
 
+import csv
 import hashlib
 import itertools
-import string
-import os
-import csv
 import json
+import os
+import string
 
 import pymysql
 from dotenv import load_dotenv
@@ -27,6 +30,7 @@ ARQUIVO_WORDLIST = "vazadas.txt"  # arquivo de senhas vazadas, uma por linha
 ARQUIVO_CSV = "relatorio.csv"  # arquivo de saida em CSV
 ARQUIVO_JSON = "relatorio.json"  # arquivo de saida em JSON
 ALFABETO_FORCA_BRUTA = string.ascii_lowercase + string.digits  # alfabeto para testes de forca bruta
+
 # Carrega as variaveis do arquivo .env (se existir), para nao precisar
 # definir DB_USER/DB_PASSWORD na mao a cada sessao do terminal.
 load_dotenv()
@@ -78,7 +82,6 @@ def carregar_banco_do_mysql():
     contas = []
     for usuario, hash_da_senha in linhas:
         contas.append({"usuario": usuario, "hash": hash_da_senha})
-
     return contas
 
 def quebrar_com_wordlist(hash_alvo, palavras):
@@ -86,7 +89,6 @@ def quebrar_com_wordlist(hash_alvo, palavras):
     for palavra in palavras:
         if gerar_hash(palavra) == hash_alvo:
             return palavra
-
     return None
 
 def forca_bruta(hash_alvo, tamanho_maximo):
@@ -198,3 +200,6 @@ def main():
     exportar_json(resultados, ARQUIVO_JSON)
     print("")
     print("Relatorios salvos: '{}' e '{}'".format(ARQUIVO_CSV, ARQUIVO_JSON))
+
+if __name__ == "__main__":
+    main()
