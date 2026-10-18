@@ -1,6 +1,0 @@
-usuario,nivel,senha_recuperada,motivos
-joao.silva,CRITICA,123456,consta em lista de senhas vazadas; curta demais (6caracteres); composta apenas por numeros
-maria.souza,ALTA,maria.souza,igual ao nome de usuario
-pedro.lima,ALTA,sol42,descoberta por forca bruta (ate 5 caracteres); curta demais (5caracteres)
-ana.costa,ALTA,zxq9k,descoberta por forca bruta (ate 5 caracteres); curta demais (5caracteres)
-bruno.dev,OK,,"resistiu a todos os testes (dicionario, usuario e forca bruta)"

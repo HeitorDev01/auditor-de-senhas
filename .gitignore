@@ -1,13 +1,14 @@
-# Ambiente virtual
-.venv/
-venv/
-env/
-
-# Cache do Python
-__pycache__/
-*.py[cod]
-
-# Credenciais / configuracao local (nunca versionar senhas do banco)
+# Segredos
 .env
+
+# Relatorios gerados (contem senhas recuperadas)
 relatorio.csv
 relatorio.json
+
+# Banco de exemplo e temporarios
+banco_de_senhas.txt
+
+# Python
+.venv/
+__pycache__/
+*.pyc
