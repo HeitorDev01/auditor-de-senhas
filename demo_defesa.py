@@ -37,3 +37,10 @@ inicio = time.perf_counter()
 for i in range(quantidade):
     sha256(str(i))
 sha_por_segundo = quantidade / (time.perf_counter() - inicio)
+
+quantidade_bcrypt = 25
+salt = bcrypt.gensalt()
+inicio = time.perf_counter()
+for i in range(quantidade_bcrypt):
+    bcrypt.hashpw(str(i).encode("utf-8"), salt)
+bcrypt_por_segundo = quantidade_bcrypt / (time.perf_counter() - inicio) 
