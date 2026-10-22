@@ -53,3 +53,7 @@ print("")
 print("=" * 60)
 print("3) PROJECAO: forca bruta de senhas curtas")
 print("=" * 60)
+for tamanho in [5, 6]:
+    espaco = 36 ** tamanho
+    segundos_sha = espaco / sha_por_segundo
+    segundos_bcrypt = espaco / bcrypt_por_segundo
