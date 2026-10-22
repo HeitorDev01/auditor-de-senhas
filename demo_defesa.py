@@ -43,4 +43,13 @@ salt = bcrypt.gensalt()
 inicio = time.perf_counter()
 for i in range(quantidade_bcrypt):
     bcrypt.hashpw(str(i).encode("utf-8"), salt)
-bcrypt_por_segundo = quantidade_bcrypt / (time.perf_counter() - inicio) 
+bcrypt_por_segundo = quantidade_bcrypt / (time.perf_counter() - inicio)
+
+print("SHA-256:{:,.0f} hashes/segundo".format(sha_por_segundo))
+print("bcrypt:{:,.0f} hashes/segundo".format(bcrypt_por_segundo))
+print("-> bcrypt e ~{:.0f}x mais lento que SHA-256".format(sha_por_segundo / bcrypt_por_segundo))
+print("")
+
+print("=" * 60)
+print("3) PROJECAO: forca bruta de senhas curtas")
+print("=" * 60)
