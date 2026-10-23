@@ -57,3 +57,7 @@ for tamanho in [5, 6]:
     espaco = 36 ** tamanho
     segundos_sha = espaco / sha_por_segundo
     segundos_bcrypt = espaco / bcrypt_por_segundo
+    print("{} caracteres ({:,} combinacoes):".format(tamanho, espaco))
+    print("  SHA-256: {:,.0f} s (~{:.1f} min)".format(segundos_sha, segundos_sha / 60))
+    print("  bcrypt: {:,.0f} s (~{:.0f} dias / {:.1f} anos)".format(
+        segundos_bcrypt, segundos_bcrypt / 86400, segundos_bcrypt / 86400 / 365))
