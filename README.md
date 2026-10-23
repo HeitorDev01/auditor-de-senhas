@@ -179,6 +179,39 @@ auditor/
 
 ---
 
+## 🛡️ Como se defender: por que bcrypt vence SHA-256
+
+Encontrar as senhas fracas é metade do trabalho. A outra metade é **guardar as senhas de forma que a força bruta deixe de valer a pena**. É aí que o algoritmo de hash faz diferença.
+
+### 1. Salt: cada hash é único
+
+Um bom algoritmo de senha adiciona um **salt** — um valor aleatório — a cada senha antes de gerar o hash. Isso torna **rainbow tables inúteis**: o atacante não consegue pré-calcular uma tabela de "hash → senha", porque cada hash do mundo é único. No SHA-256 puro, `123456` sempre vira o mesmo hash — por isso ele é vulnerável.
+
+### 2. Lentidão proposital: força bruta deixa de ser viável
+
+bcrypt é **deliberadamente lento**. Medição em uma máquina comum:
+
+| Algoritmo | Hashes por segundo |
+|-----------|--------------------|
+| SHA-256   | ~1.040.000         |
+| bcrypt    | ~4                 |
+
+bcrypt é cerca de **295.000× mais lento** — e isso é uma vantagem de segurança. Projetando no ataque de força bruta deste projeto:
+
+| Força bruta           | SHA-256 (rápido) | bcrypt (correto) |
+|-----------------------|------------------|------------------|
+| Senha de 5 caracteres | ~58 segundos     | **~198 dias**    |
+| Senha de 6 caracteres | ~35 minutos      | **~20 anos**     |
+
+### Conclusão
+
+A senha **fraca continua fraca** — `123456` cai num ataque de dicionário com ou sem bcrypt, porque é previsível. O que o bcrypt protege é contra **força bruta** de senhas imprevisíveis. A defesa real combina as duas coisas:
+
+- **Hashing lento e salgado** (bcrypt ou argon2), nunca SHA-256/MD5 puros.
+- **Senhas longas e imprevisíveis**, que explodem o espaço de busca.
+
+---
+
 ## ⚖️ Uso responsável
 
 Esta ferramenta foi feita para uso **defensivo e autorizado**. Rode-a apenas em bancos de senhas da sua própria organização, com permissão explícita. Usar técnicas de quebra de senha contra sistemas de terceiros sem autorização é ilegal.
