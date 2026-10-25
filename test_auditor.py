@@ -11,3 +11,16 @@ def test_quebrar_com_wordlist_acha():
     vazadas = ["admin", "123456", "senha"]
     alvo = auditor.gerar_hash("123456")
     assert auditor.quebrar_com_wordlist(alvo, vazadas) == "123456"
+
+def test_quebrar_com_word_list_nao_acha():
+    vazadas = ["admin", "123456"]
+    alvo = auditor.gerar_hash("naoxiste")
+    assert auditor.quebrar_com_wordlist(alvo, vazadas) is None
+
+def test_forca_bruta_acha_curta():
+    alvo = auditor.gerar_hash("ab")
+    assert auditor.forca_bruta(alvo, 3) == "ab"
+
+def test_forca_bruta_nao_acha_dentro_do_limite():
+    alvo = auditor.gerar_hash("abcdef")
+    assert auditor.forca_bruta(alvo, 2) is None
