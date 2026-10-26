@@ -24,3 +24,18 @@ def test_forca_bruta_acha_curta():
 def test_forca_bruta_nao_acha_dentro_do_limite():
     alvo = auditor.gerar_hash("abcdef")
     assert auditor.forca_bruta(alvo, 2) is None
+
+def test_recuperr_senha_por_wordlist():
+    vazadas = ["123456"]
+    alvo = auditor.gerar_hash("123456")
+    assert auditor.recuperar_senha("joao", alvo, vazadas, 2) == ("123456","vazadas")
+
+def test_recuperar_senha_igual_ao_usuario():
+    alvo = auditor.gerar_hash("maria")
+    assert auditor.recuperar_senha("maria", alvo, [], 2) == ("maria", "igual_ao_usuario")
+
+def test_recuperar_senha_por_forca_bruta():
+    alvo = auditor.gerar_hash("ab")
+    senha, origem = auditor.recuperar_senha("joao", alvo, [], 3)
+    assert senha == "ab"
+    assert origem == "forca_bruta"
