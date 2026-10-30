@@ -22,6 +22,7 @@ import os
 import string
 
 import pymysql
+import requests
 from dotenv import load_dotenv
 
 TAMANHO_MINIMO_SENHA = 8  # tamanho minimo de senha aceitavel
@@ -30,7 +31,7 @@ ARQUIVO_WORDLIST = "vazadas.txt"  # arquivo de senhas vazadas, uma por linha
 ARQUIVO_CSV = "relatorio.csv"  # arquivo de saida em CSV
 ARQUIVO_JSON = "relatorio.json"  # arquivo de saida em JSON
 ALFABETO_FORCA_BRUTA = string.ascii_lowercase + string.digits  # alfabeto para testes de forca bruta
-
+CHECAR_HIBP = True
 # Carrega as variaveis do arquivo .env (se existir), para nao precisar
 # definir DB_USER/DB_PASSWORD na mao a cada sessao do terminal.
 load_dotenv()
@@ -180,6 +181,22 @@ def imprimir_relatorio(resultados, contadores,qtd_contas,qtd_vazadas):
         print("Acao recomendada: forcar troca de senha de {} contas(s).".format(total_fracas))
     else:
         print("Nenhuma senha fraca encontrada nos testes.")
+
+def checar_vazamento_hipb(senha):
+    """Consultar a Have I Been Pwned com k-anonimato. Devolve quantas vezes a senha vazou."""
+    sha1 = hashlib.sha1(senha.encode("utf-8")).hexdigest().upper()
+    prefixo = sha1[:5]
+    sufixo = sha1[:5]
+
+    url = "https://api.pwnedpasswords.com/range/" + prefixo
+    resposta = requests.get(url, timeout=10)
+    resposta.raise_for_status()
+
+    for linha in resposta.text.splitlines():
+        hash_sufixo, contagem = linha.split(":")
+        if hash_sufixo == sufixo:
+            return int(contagem)
+    return 0
 
 
 def main():
