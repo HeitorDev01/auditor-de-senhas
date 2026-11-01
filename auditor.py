@@ -205,9 +205,19 @@ def main():
 
     resultados = []
     contadores = {"CRITICA": 0, "ALTA": 0, "OK": 0}
-    
+
     for conta in contas:
         resultado = classificar_conta(conta["usuario"], conta["hash"], vazadas, TAMANHO_MAXIMO_BRUTA)
+
+        if CHECAR_HIBP and resultado["senha"] is not None:
+            try:
+                vazamentos = checar_vazamento_hibp(resultado["senha"])
+                if vazamentos > 0:
+                    resultado["motivos"].append(
+                        "aparece em {:,} vazamentos conhecidos (Have I Been Pwned)".format(vazamentos))
+            except Exception:
+                pass  # sem internet ou API fora do ar: segue sem o HIBP
+
         resultados.append(resultado)
         contadores[resultado["nivel"]] += 1
 
@@ -217,6 +227,7 @@ def main():
     exportar_json(resultados, ARQUIVO_JSON)
     print("")
     print("Relatorios salvos: '{}' e '{}'".format(ARQUIVO_CSV, ARQUIVO_JSON))
+
 
 if __name__ == "__main__":
     main()
