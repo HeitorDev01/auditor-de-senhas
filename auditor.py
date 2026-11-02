@@ -198,6 +198,8 @@ def checar_vazamento_hipb(senha):
             return int(contagem)
     return 0
 
+    
+
 
 def main():
     contas = carregar_banco_do_mysql()
@@ -215,8 +217,8 @@ def main():
                 if vazamentos > 0:
                     resultado["motivos"].append(
                         "aparece em {:,} vazamentos conhecidos (Have I Been Pwned)".format(vazamentos))
-            except Exception:
-                pass  # sem internet ou API fora do ar: segue sem o HIBP
+            except Exception as e:
+                print("   [HIBP falhou para {}]: {}".format(resultado["usuario"], e))
 
         resultados.append(resultado)
         contadores[resultado["nivel"]] += 1
