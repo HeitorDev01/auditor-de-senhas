@@ -1,14 +1,39 @@
 # Segredos
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
 
 # Relatorios gerados (contem senhas recuperadas)
-relatorio.csv
-relatorio.json
+relatorio*.csv
+relatorio*.json
 
-# Banco de exemplo e temporarios
+# Bancos, dumps e temporarios
 banco_de_senhas.txt
+*.sql
+*.sql.gz
+*.dump
+*.db
+*.sqlite
+*.sqlite3
+*.log
+*.bak
+*.tmp
 
 # Python
 .venv/
+.venv-*/
+venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editores e ferramentas locais
+.vscode/
+.idea/
+.claude/settings.local.json

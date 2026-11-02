@@ -182,11 +182,11 @@ def imprimir_relatorio(resultados, contadores,qtd_contas,qtd_vazadas):
     else:
         print("Nenhuma senha fraca encontrada nos testes.")
 
-def checar_vazamento_hipb(senha):
-    """Consultar a Have I Been Pwned com k-anonimato. Devolve quantas vezes a senha vazou."""
+def checar_vazamento_hibp(senha):
+    """Consulta a Have I Been Pwned com k-anonimato. Devolve quantas vezes a senha vazou."""
     sha1 = hashlib.sha1(senha.encode("utf-8")).hexdigest().upper()
     prefixo = sha1[:5]
-    sufixo = sha1[:5]
+    sufixo = sha1[5:]
 
     url = "https://api.pwnedpasswords.com/range/" + prefixo
     resposta = requests.get(url, timeout=10)
@@ -196,9 +196,8 @@ def checar_vazamento_hipb(senha):
         hash_sufixo, contagem = linha.split(":")
         if hash_sufixo == sufixo:
             return int(contagem)
+        
     return 0
-
-    
 
 
 def main():
