@@ -23,10 +23,15 @@ import string
 
 import pymysql
 import requests
+import argparse
 from dotenv import load_dotenv
 
+parser = argparse.ArgumentParser(description="Auditor de senhas")
+parser.add_argument("--tamanho-maximo-bruta", type=int, default=5, help="Tamanho máximo de senha a ser testada por força bruta")
+args = parser.parse_args()
+
 TAMANHO_MINIMO_SENHA = 8  # tamanho minimo de senha aceitavel
-TAMANHO_MAXIMO_BRUTA = 5  # tamanho maximo de senha a ser testada por forca bruta
+TAMANHO_MAXIMO_BRUTA = args.tamanho_maximo_bruta  # tamanho maximo de senha a ser testada por forca bruta
 ARQUIVO_WORDLIST = "vazadas.txt"  # arquivo de senhas vazadas, uma por linha
 ARQUIVO_CSV = "relatorio.csv"  # arquivo de saida em CSV
 ARQUIVO_JSON = "relatorio.json"  # arquivo de saida em JSON
