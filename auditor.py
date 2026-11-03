@@ -213,6 +213,10 @@ def analisar_argumentos():
         "--max-bruta", type=int, default=TAMANHO_MAXIMO_BRUTA,
         help="tamanho maximo da senha testada por forca bruta (padrao: %(default)s)",
     )
+    parser.add_argument(
+        "--wordlist", default=ARQUIVO_WORDLIST,
+        help="arquivo de senhas vazadas (padrao: %(default)s)",
+    )
     return parser.parse_args()
 
 
