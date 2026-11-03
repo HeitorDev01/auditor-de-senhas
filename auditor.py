@@ -217,6 +217,10 @@ def analisar_argumentos():
         "--wordlist", default=ARQUIVO_WORDLIST,
         help="arquivo de senhas vazadas (padrao: %(default)s)",
     )
+    parser.add_argument(
+        "--sem-hibp", action="store_true",
+        help="desliga a checagem na Have I Been Pwned (modo offline)",
+    )
     return parser.parse_args()
 
 
