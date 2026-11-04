@@ -91,3 +91,7 @@ def test_entropia_cresce_com_o_tamanho():
 
 def test_entropia_cresce_com_variedade():
     assert auditor.estimar_entropia("aB3$") > auditor.estimar_entropia("abcd")
+
+def test_entropia_valor_conhecido():
+    # 4 digitos: alfabeto de 10 -> 4 * log2(10) = 13.29 bits
+    assert round(auditor.estimar_entropia("1234"), 2) == 13.29
