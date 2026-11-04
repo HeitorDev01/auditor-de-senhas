@@ -88,3 +88,6 @@ def test_entropia_vazia_e_zero():
 
 def test_entropia_cresce_com_o_tamanho():
     assert auditor.estimar_entropia("abcdef") > auditor.estimar_entropia("abc")
+
+def test_entropia_cresce_com_variedade():
+    assert auditor.estimar_entropia("aB3$") > auditor.estimar_entropia("abcd")
