@@ -132,6 +132,8 @@ def estimar_entropia(senha):
         return 0.0
     return len(senha) * math.log2(tamanho_alfabeto)
 
+def rotular_forca(bits):
+    """Traduz bits de entropia em um rotulo de forca."""
 
 def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     senha, origem =  recuperar_senha(usuario, hash_armazenamento, vazadas, tamanho_bruta)
