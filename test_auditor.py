@@ -82,3 +82,6 @@ def test_classificar_resistente_e_ok():
     r = auditor.classificar_conta("joao", alvo, [], 2)
     assert r["nivel"] == "OK"
     assert r["senha"] is None
+
+def test_entropia_vazia_e_zero():
+    assert auditor.estimar_entropia("") == 0.0
