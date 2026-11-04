@@ -134,6 +134,10 @@ def estimar_entropia(senha):
 
 def rotular_forca(bits):
     """Traduz bits de entropia em um rotulo de forca."""
+    if bits < 28:
+        return "muito fraca"
+    if bits < 36:
+        return "fraca"
 
 def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     senha, origem =  recuperar_senha(usuario, hash_armazenamento, vazadas, tamanho_bruta)
