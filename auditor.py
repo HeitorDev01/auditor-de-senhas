@@ -226,23 +226,24 @@ def analisar_argumentos():
 
 def main():
     args = analisar_argumentos()
+
     contas = carregar_banco_do_mysql()
-    vazadas = carregar_wordlist(ARQUIVO_WORDLIST)
+    vazadas = carregar_wordlist(args.wordlist)
 
     resultados = []
     contadores = {"CRITICA": 0, "ALTA": 0, "OK": 0}
 
     for conta in contas:
-        resultado = classificar_conta(conta["usuario"], conta["hash"], vazadas, TAMANHO_MAXIMO_BRUTA)
+        resultado = classificar_conta(conta["usuario"], conta["hash"], vazadas, args.max_bruta)
 
-        if CHECAR_HIBP and resultado["senha"] is not None:
+        if (not args.sem_hibp) and resultado["senha"] is not None:
             try:
                 vazamentos = checar_vazamento_hibp(resultado["senha"])
                 if vazamentos > 0:
                     resultado["motivos"].append(
                         "aparece em {:,} vazamentos conhecidos (Have I Been Pwned)".format(vazamentos))
-            except Exception as e:
-                print("   [HIBP falhou para {}]: {}".format(resultado["usuario"], e))
+            except Exception:
+                pass
 
         resultados.append(resultado)
         contadores[resultado["nivel"]] += 1
