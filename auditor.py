@@ -167,6 +167,9 @@ def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     if senha.isdigit():
         motivos.append("composta apenas por numeros")
 
+    bits = estimar_entropia(senha)
+    motivos.append("entropia teorica: {:.1f} bits ({})".format(bits, rotular_forca(bits)))
+
     nivel = "CRITICA" if origem == "vazada" else "ALTA"
 
     return {"usuario": usuario, "nivel": nivel, "senha": senha, "motivos": motivos}
