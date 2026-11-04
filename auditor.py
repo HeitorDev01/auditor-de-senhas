@@ -138,6 +138,11 @@ def rotular_forca(bits):
         return "muito fraca"
     if bits < 36:
         return "fraca"
+    if bits < 60:
+        return "razoavel"
+    if bits < 80:
+        return "forte"
+    return "muito forte"
 
 def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     senha, origem =  recuperar_senha(usuario, hash_armazenamento, vazadas, tamanho_bruta)
