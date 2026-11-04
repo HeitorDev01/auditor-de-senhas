@@ -99,3 +99,5 @@ def test_entropia_valor_conhecido():
 def test_rotulos_nos_limites():
     assert auditor.rotular_forca(27.9) == "muito fraca"
     assert auditor.rotular_forca(28) == "fraca"
+    assert auditor.rotular_forca(36) == "razoavel"
+    assert auditor.rotular_forca(60) == "forte"
