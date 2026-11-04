@@ -26,12 +26,8 @@ import requests
 import argparse
 from dotenv import load_dotenv
 
-parser = argparse.ArgumentParser(description="Auditor de senhas")
-parser.add_argument("--tamanho-maximo-bruta", type=int, default=5, help="Tamanho máximo de senha a ser testada por força bruta")
-args = parser.parse_args()
-
 TAMANHO_MINIMO_SENHA = 8  # tamanho minimo de senha aceitavel
-TAMANHO_MAXIMO_BRUTA = args.tamanho_maximo_bruta  # tamanho maximo de senha a ser testada por forca bruta
+TAMANHO_MAXIMO_BRUTA = 5  # tamanho maximo padrao de senha a ser testada por forca bruta (ajustavel via --max-bruta)
 ARQUIVO_WORDLIST = "vazadas.txt"  # arquivo de senhas vazadas, uma por linha
 ARQUIVO_CSV = "relatorio.csv"  # arquivo de saida em CSV
 ARQUIVO_JSON = "relatorio.json"  # arquivo de saida em JSON
@@ -119,6 +115,12 @@ def recuperar_senha(usuario, hash_armazenado, vazadas, tamanho_bruta):
     if recuperada is not None:
         return recuperada, "forca_bruta"
     return None, None
+
+def estimar_entropia(senha):
+    """Estima a entropia teorica (em bits) pelo tamanho do alfabeto usado."""
+    tamanho_alfabeto = 0
+    if any(c in string.ascii_lowercase for c in senha):
+        tamanho_alfabeto += 26
 
 def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     senha, origem =  recuperar_senha(usuario, hash_armazenamento, vazadas, tamanho_bruta)
