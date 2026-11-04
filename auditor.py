@@ -121,7 +121,12 @@ def estimar_entropia(senha):
     tamanho_alfabeto = 0
     if any(c in string.ascii_lowercase for c in senha):
         tamanho_alfabeto += 26
+    if any(c in string.ascii_uppercase for c in senha):
+        tamanho_alfabeto += 26
+    if any(c in string.digits for c in senha):
+        tamanho_alfabeto += 10
 
+        
 def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     senha, origem =  recuperar_senha(usuario, hash_armazenamento, vazadas, tamanho_bruta)
 
