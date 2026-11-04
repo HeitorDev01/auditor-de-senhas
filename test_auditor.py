@@ -95,3 +95,7 @@ def test_entropia_cresce_com_variedade():
 def test_entropia_valor_conhecido():
     # 4 digitos: alfabeto de 10 -> 4 * log2(10) = 13.29 bits
     assert round(auditor.estimar_entropia("1234"), 2) == 13.29
+
+def test_rotulos_nos_limites():
+    assert auditor.rotular_forca(27.9) == "muito fraca"
+    assert auditor.rotular_forca(28) == "fraca"
