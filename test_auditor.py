@@ -101,3 +101,4 @@ def test_rotulos_nos_limites():
     assert auditor.rotular_forca(28) == "fraca"
     assert auditor.rotular_forca(36) == "razoavel"
     assert auditor.rotular_forca(60) == "forte"
+    assert auditor.rotular_forca(80) == "muito forte"
