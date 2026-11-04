@@ -18,6 +18,7 @@ import csv
 import hashlib
 import itertools
 import json
+import math
 import os
 import string
 
@@ -125,8 +126,13 @@ def estimar_entropia(senha):
         tamanho_alfabeto += 26
     if any(c in string.digits for c in senha):
         tamanho_alfabeto += 10
+    if any(c in string.punctuation for c in senha):
+        tamanho_alfabeto += len(string.punctuation)
+    if tamanho_alfabeto == 0:
+        return 0.0
+    return len(senha) * math.log2(tamanho_alfabeto)
 
-        
+
 def classificar_conta(usuario, hash_armazenamento, vazadas, tamanho_bruta):
     senha, origem =  recuperar_senha(usuario, hash_armazenamento, vazadas, tamanho_bruta)
 
