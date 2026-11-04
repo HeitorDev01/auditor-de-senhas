@@ -205,10 +205,10 @@ def checar_vazamento_hibp(senha):
     return 0
 
 def analisar_argumentos():
-    """Define e le as opcoe de linha de comando"""
+    """Define e le as opcoes de linha de comando."""
     parser = argparse.ArgumentParser(
         description="Auditor de senhas: le um banco MySQL e aponta senhas fracas."
-    ) 
+    )
     parser.add_argument(
         "--max-bruta", type=int, default=TAMANHO_MAXIMO_BRUTA,
         help="tamanho maximo da senha testada por forca bruta (padrao: %(default)s)",
