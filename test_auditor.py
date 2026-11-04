@@ -85,3 +85,6 @@ def test_classificar_resistente_e_ok():
 
 def test_entropia_vazia_e_zero():
     assert auditor.estimar_entropia("") == 0.0
+
+def test_entropia_cresce_com_o_tamanho():
+    assert auditor.estimar_entropia("abcdef") > auditor.estimar_entropia("abc")
